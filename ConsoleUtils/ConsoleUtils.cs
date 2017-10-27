@@ -9,6 +9,10 @@ namespace Battousai.Utils
 {
     public static class ConsoleUtils
     {
+        private static Action<string> consoleWriter = null;
+        private static Func<string> consoleReader = null;
+        private static bool injectNewlineForWriter = false;
+
         public static void RunLoggingExceptions(Action action, bool isPauseAtEnd = false)
         {
             try
@@ -23,23 +27,36 @@ namespace Battousai.Utils
             if (isPauseAtEnd)
             {
                 Log("Press <enter> to continue...");
-                Console.ReadLine();
+                ReadFromConsoleReader();
             }
         }
 
-        public static void Log()
+        private static string ReadFromConsoleReader()
         {
-            Console.WriteLine();
+            if (consoleReader == null)
+                return Console.ReadLine();
+            else
+                return consoleReader();
         }
 
-        public static void Log(string message)
+        private static void WriteToConsoleWriter(string message)
         {
-            Console.WriteLine(message);
+            if (consoleWriter == null)
+                Console.WriteLine(message);
+            else if (injectNewlineForWriter)
+                consoleWriter(message + Environment.NewLine);
+            else
+                consoleWriter(message);
+        }
+
+        public static void Log(string message = "")
+        {
+            WriteToConsoleWriter(message ?? "");
         }
 
         public static void Log(string message, params object[] parameters)
         {
-            Console.WriteLine(message, parameters);
+            WriteToConsoleWriter(String.Format(message ?? "", parameters));
         }
 
         public static void LogException(Exception ex)
@@ -93,11 +110,22 @@ namespace Battousai.Utils
             Iterate(iterations, _ => action());
         }
 
-        public static void Iterate(int iterations, Action<int> action)
+        public static void Iterate(int iterations, Action<int> action, int startingInterval = 0)
         {
-            Enumerable.Repeat(1, iterations)
+            Enumerable.Range(startingInterval, iterations)
                 .ToList()
                 .ForEach(x => action(x));
+        }
+
+        public static void RegisterConsoleWriter(Action<string> writer, bool injectNewline = false)
+        {
+            consoleWriter = writer;
+            injectNewlineForWriter = injectNewline;
+        }
+
+        public static void RegisterConsoleReader(Func<string> reader)
+        {
+            consoleReader = reader;
         }
     }
 }
