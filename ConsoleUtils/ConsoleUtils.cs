@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Battousai.Utils
 {
     public static class ConsoleUtils
     {
+        private static readonly Regex logExceptionMessageEndingRegex = new Regex(@"[:-]\s*$");
+
         private static Action<string> consoleWriter = null;
         private static Func<string> consoleReader = null;
         private static bool injectNewlineForWriter = false;
@@ -72,8 +71,6 @@ namespace Battousai.Utils
                 Log($"Caught exception: <{ex.GetType().Name}> {ex.Message}");
             else
             {
-                Regex logExceptionMessageEndingRegex = new Regex(@"[:-]\s*$");
-
                 if (!logExceptionMessageEndingRegex.IsMatch(message))
                     message += ": ";
 
