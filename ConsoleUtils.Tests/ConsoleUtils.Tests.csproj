@@ -63,8 +63,16 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="ConsoleUtils.Tests.cs" />
+    <Compile Include="IterateTests.cs" />
+    <Compile Include="LogExceptionTests.cs" />
+    <Compile Include="LogTests.cs" />
+    <Compile Include="MeasureDurationTests.cs" />
+    <Compile Include="NormalizeDurationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterConsoleReaderTests.cs" />
+    <Compile Include="RegisterConsoleWriterTests.cs" />
+    <Compile Include="RunLoggingExceptionsAsyncTests.cs" />
+    <Compile Include="RunLoggingExceptionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConsoleUtils\ConsoleUtils.csproj">
