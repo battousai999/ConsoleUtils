@@ -21,11 +21,15 @@ namespace Battousai.Utils
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="isPauseAtEnd">A flag indicating whether to pause after executing the action.</param>
-        public static void RunLoggingExceptions(Action action, bool isPauseAtEnd = false)
+        /// <param name="displayDuration">A flag indicating whether to display duration of execution.</param>
+        public static void RunLoggingExceptions(Action action, bool isPauseAtEnd = false, bool displayDuration = true)
         {
             try
             {
-                action();
+                var duration = MeasureDuration(action);
+
+                if (displayDuration)
+                    Log($"Finished in {NormalizeDuration(duration)}.");
             }
             catch (Exception ex)
             {
@@ -47,13 +51,35 @@ namespace Battousai.Utils
         /// </summary>
         /// <param name="action">The asynchronous action to execute.</param>
         /// <param name="isPauseAtEnd">A flag indicating whether to pause after executing the action.</param>
-        public static void RunLoggingExceptionsAsync(Func<Task> action, bool isPauseAtEnd = false) 
+        /// <param name="displayDuration">A flag indicating whether to display duration of execution.</param>
+        public static void RunLoggingExceptionsAsync(Func<Task> action, bool isPauseAtEnd = false, bool displayDuration = true) 
         {
             RunLoggingExceptions(() =>
             {
                 action().GetAwaiter().GetResult();
             },
-            isPauseAtEnd);
+            isPauseAtEnd,
+            displayDuration);
+        }
+
+        /// <summary>
+        /// This method maps a TimeSpan duration to a string representation of the duration in units of milliseconds,
+        /// seconds, minutes, hours, or days, as appropriate.
+        /// </summary>
+        /// <param name="duration">A duration.</param>
+        /// <returns>A string representation of the duration.</returns>
+        public static string NormalizeDuration(TimeSpan duration)
+        {
+            if (duration > TimeSpan.FromDays(1))
+                return $"{duration.TotalDays:0.00} days";
+            else if (duration > TimeSpan.FromHours(1))
+                return $"{duration.TotalHours:0.00} hours";
+            else if (duration > TimeSpan.FromMinutes(1))
+                return $"{duration.TotalMinutes:0.00} minutes";
+            else if (duration > TimeSpan.FromSeconds(1))
+                return $"{duration.TotalSeconds:0.00} seconds";
+            else
+                return $"{duration.TotalMilliseconds} ms";
         }
 
         private static string ReadFromConsoleReader()

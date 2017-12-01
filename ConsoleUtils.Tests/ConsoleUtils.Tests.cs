@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using utils = Battousai.Utils;
@@ -86,6 +87,30 @@ namespace ConsoleUtils.Tests
         }
 
         [Fact]
+        public void RunLoggingExceptions_should_display_duration_when_appropriate()
+        {
+            string log = "";
+
+            utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
+
+            utils.ConsoleUtils.RunLoggingExceptions(() => { Thread.Sleep(100); }, false, true);
+
+            Assert.Contains("Finished in", log);
+        }
+
+        [Fact]
+        public void RunLoggingExceptions_should_not_display_duration_when_inappropriate()
+        {
+            string log = "";
+
+            utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
+
+            utils.ConsoleUtils.RunLoggingExceptions(() => { Thread.Sleep(100); }, false, false);
+
+            Assert.DoesNotContain("Finished in", log);
+        }
+
+        [Fact]
         public void RunLoggingExceptionsAsync_should_consume_exceptions()
         {
             utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
@@ -160,7 +185,74 @@ namespace ConsoleUtils.Tests
             Assert.False(hasCalledReadline);
         }
 
+        [Fact]
+        public void RunLoggingExceptionsAsync_should_display_duration_when_appropriate()
+        {
+            string log = "";
 
+            utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
+
+            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false, true);
+
+            Assert.Contains("Finished in", log);
+        }
+
+        [Fact]
+        public void RunLoggingExceptionsAsync_should_not_display_duration_when_inappropriate()
+        {
+            string log = "";
+
+            utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
+
+            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false, false);
+
+            Assert.DoesNotContain("Finished in", log);
+        }
+
+        [Fact]
+        public void NormalizeDuration_should_return_milliseconds()
+        {
+            var duration = TimeSpan.FromMilliseconds(500);
+            var value = utils.ConsoleUtils.NormalizeDuration(duration);
+
+            Assert.Equal(duration.TotalMilliseconds.ToString("0 ms"), value);
+        }
+
+        [Fact]
+        public void NormalizeDuration_should_return_seconds()
+        {
+            var duration = TimeSpan.FromSeconds(20);
+            var value = utils.ConsoleUtils.NormalizeDuration(duration);
+
+            Assert.Equal(duration.TotalSeconds.ToString("0.00 seconds"), value);
+        }
+
+        [Fact]
+        public void NormalizeDuration_should_return_minutes()
+        {
+            var duration = TimeSpan.FromMinutes(30);
+            var value = utils.ConsoleUtils.NormalizeDuration(duration);
+
+            Assert.Equal(duration.TotalMinutes.ToString("0.00 minutes"), value);
+        }
+
+        [Fact]
+        public void NormalizeDuration_should_return_hours()
+        {
+            var duration = TimeSpan.FromHours(2);
+            var value = utils.ConsoleUtils.NormalizeDuration(duration);
+
+            Assert.Equal(duration.TotalHours.ToString("0.00 hours"), value);
+        }
+
+        [Fact]
+        public void NormalizeDuration_should_return_days()
+        {
+            var duration = TimeSpan.FromDays(9);
+            var value = utils.ConsoleUtils.NormalizeDuration(duration);
+
+            Assert.Equal(duration.TotalDays.ToString("0.00 days"), value);
+        }
 
         [Fact]
         public void Log_should_write_to_console()
@@ -297,7 +389,7 @@ namespace ConsoleUtils.Tests
         }
 
         [Fact]
-        public void Iterage_should_loop_expected_number_of_times_1()
+        public void Iterate_should_loop_expected_number_of_times_1()
         {
             var counter = 0;
             var iterations = 1000;
@@ -308,7 +400,7 @@ namespace ConsoleUtils.Tests
         }
 
         [Fact]
-        public void Iterage_should_loop_expected_number_of_times_2()
+        public void Iterate_should_loop_expected_number_of_times_2()
         {
             var counter = 0;
             var iterations = 999;
