@@ -79,7 +79,7 @@ namespace Battousai.Utils
             else if (duration > TimeSpan.FromSeconds(1))
                 return $"{duration.TotalSeconds:0.00} seconds";
             else
-                return $"{duration.TotalMilliseconds} ms";
+                return $"{duration.TotalMilliseconds:0} ms";
         }
 
         private static string ReadFromConsoleReader()
