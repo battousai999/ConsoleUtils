@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 using utils = Battousai.Utils;
 
@@ -85,6 +86,83 @@ namespace ConsoleUtils.Tests
         }
 
         [Fact]
+        public void RunLoggingExceptionsAsync_should_consume_exceptions()
+        {
+            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
+            {
+                await Task.Delay(100);
+                throw new InvalidOperationException("Test exception");
+            });
+        }
+
+        [Fact]
+        public void RunLoggingExceptionsAsync_should_perform_the_action()
+        {
+            var value = 0;
+
+            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
+            {
+                await Task.Delay(100);
+                value = 99;
+            });
+
+            Assert.Equal(99, value);
+        }
+
+        [Fact]
+        public void RunLoggingExceptionsAsync_should_log_a_thrown_exception()
+        {
+            var log = "";
+            var exceptionMessage = "Test exception";
+
+            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+
+            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
+            {
+                await Task.Delay(100);
+                throw new InvalidOperationException(exceptionMessage);
+            });
+
+            Assert.DoesNotContain("AggregateException", log);
+            Assert.Contains("InvalidOperationException", log);
+            Assert.Contains(exceptionMessage, log);
+        }
+
+        [Fact]
+        public void RunLoggingExceptionsAsync_should_capture_console_readline_when_appropriate()
+        {
+            var hasCalledReadline = false;
+
+            utils.ConsoleUtils.RegisterConsoleReader(() =>
+            {
+                hasCalledReadline = true;
+                return "";
+            });
+
+            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, true);
+
+            Assert.True(hasCalledReadline);
+        }
+
+        [Fact]
+        public void RunLoggingExceptionsAsync_should_not_capture_console_readline_when_inappropriate()
+        {
+            var hasCalledReadline = false;
+
+            utils.ConsoleUtils.RegisterConsoleReader(() =>
+            {
+                hasCalledReadline = true;
+                return "";
+            });
+
+            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false);
+
+            Assert.False(hasCalledReadline);
+        }
+
+
+
+        [Fact]
         public void Log_should_write_to_console()
         {
             var log = "";
@@ -162,6 +240,34 @@ namespace ConsoleUtils.Tests
             }
 
             Assert.Contains(errorMessage, log);
+        }
+
+        [Fact]
+        public void LogException_should_log_the_type_and_exception_message_for_inner_exception()
+        {
+            var log = "";
+            var exceptionMessage = "This is a test exception message.";
+
+            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+
+            try
+            {
+                try
+                {
+                    throw new ApplicationException(exceptionMessage);
+                }
+                catch (Exception innerEx)
+                {
+                    throw new InvalidOperationException("Some outer exception message.", innerEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                utils.ConsoleUtils.LogException(ex);
+            }
+
+            Assert.Contains("ApplicationException", log);
+            Assert.Contains(exceptionMessage, log);
         }
 
         [Fact]

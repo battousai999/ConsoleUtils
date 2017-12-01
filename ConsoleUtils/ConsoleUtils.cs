@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Battousai.Utils
 {
@@ -28,6 +29,15 @@ namespace Battousai.Utils
                 Log("Press <enter> to continue...");
                 ReadFromConsoleReader();
             }
+        }
+
+        public static void RunLoggingExceptionsAsync(Func<Task> action, bool isPauseAtEnd = false) 
+        {
+            RunLoggingExceptions(() =>
+            {
+                action().GetAwaiter().GetResult();
+            },
+            isPauseAtEnd);
         }
 
         private static string ReadFromConsoleReader()
