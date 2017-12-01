@@ -28,6 +28,9 @@ namespace Battousai.Utils
             {
                 var duration = MeasureDuration(action);
 
+                if (displayDuration || isPauseAtEnd)
+                    Log();
+
                 if (displayDuration)
                     Log($"Finished in {NormalizeDuration(duration)}.");
             }
