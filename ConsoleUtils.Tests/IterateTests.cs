@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using utils = Battousai.Utils;
@@ -62,6 +64,48 @@ namespace ConsoleUtils.Tests
             {
                 Assert.Equal(expectedValues[i], list[i]);
             }
+        }
+
+        [Fact]
+        public void WhenCalledReturningTotalDuration_ThenReturnsNonZeroDuration()
+        {
+            var duration = utils.ConsoleUtils.Iterate(10, () => Thread.Sleep(TimeSpan.FromMilliseconds(100)), false);
+
+            Assert.True(duration > TimeSpan.Zero);
+        }
+
+        [Fact]
+        public void WhenCalledReturningTotalDuration_ThenReturnsLargerDurationWhenLargerIterations()
+        {
+            var duration1 = utils.ConsoleUtils.Iterate(2, () => Thread.Sleep(TimeSpan.FromMilliseconds(100)), false);
+            var duration2 = utils.ConsoleUtils.Iterate(10, () => Thread.Sleep(TimeSpan.FromMilliseconds(100)), false);
+
+            Assert.True(duration2 > duration1);
+        }
+
+        [Fact]
+        public void WhenCalledReturningAverageDuration_ThenReturnsNonZeroDuration()
+        {
+            var duration = utils.ConsoleUtils.Iterate(10, () => Thread.Sleep(TimeSpan.FromMilliseconds(100)), false);
+
+            Assert.True(duration > TimeSpan.Zero);
+        }
+
+        [Fact]
+        public void WhenCalledReturningAverageDuration_ThenReturnsApproximatelyAverageDuration()
+        {
+            TimeSpan averageDuration = TimeSpan.Zero;
+            int iterations = 10;
+
+            var totalDuration = utils.ConsoleUtils.MeasureDuration(() =>
+            {
+                averageDuration = utils.ConsoleUtils.Iterate(iterations, () => Thread.Sleep(TimeSpan.FromMilliseconds(100)), true);
+            });
+
+            var calculatedDurationTicks = averageDuration.Ticks * iterations;
+            var deviation = (double) Math.Abs(totalDuration.Ticks - calculatedDurationTicks) / totalDuration.Ticks;
+
+            Assert.True(deviation < 0.05);
         }
     }
 }

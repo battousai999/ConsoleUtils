@@ -186,9 +186,12 @@ namespace Battousai.Utils
         /// </summary>
         /// <param name="iterations">The number of times to execute the action.</param>
         /// <param name="action">The action to execute.</param>
-        public static void Iterate(int iterations, Action action)
+        /// <param name="returnsAverageDuration">
+        /// A flag indicating whether to return a total execution duration or an average execution duration.
+        /// </param>
+        public static TimeSpan Iterate(int iterations, Action action, bool returnsAverageDuration = false)
         {
-            Iterate(iterations, _ => action());
+            return Iterate(iterations, _ => action(), 0, returnsAverageDuration);
         }
 
         /// <summary>
@@ -201,11 +204,20 @@ namespace Battousai.Utils
         /// <param name="startingInterval">
         /// The starting value of the iteration index (passed to the action).
         /// </param>
-        public static void Iterate(int iterations, Action<int> action, int startingInterval = 0)
+        /// <param name="returnsAverageDuration">
+        /// A flag indicating whether to return a total execution duration or an average execution duration.
+        /// </param>
+        public static TimeSpan Iterate(int iterations, Action<int> action, int startingInterval = 0, bool returnsAverageDuration = false)
         {
+            var startTime = DateTime.Now;
+
             Enumerable.Range(startingInterval, iterations)
                 .ToList()
-                .ForEach(x => action(x));
+                .ForEach(action);
+
+            var duration = DateTime.Now.Subtract(startTime);
+
+            return (returnsAverageDuration ? TimeSpan.FromTicks(duration.Ticks / iterations) : duration);
         }
 
         /// <summary>
