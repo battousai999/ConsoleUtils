@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -150,6 +152,7 @@ namespace Battousai.Utils
                 Log($"{message}<{ex.GetType().Name}> {ex.Message}");
             }
 
+            LogExceptionData(ex.Data);
             Log(ex.StackTrace);
 
             var iex = ex.InnerException;
@@ -158,12 +161,32 @@ namespace Battousai.Utils
             {
                 Log();
                 Log($"[Inner Exception] <{iex.GetType().Name}> {iex.Message}");
+                LogExceptionData(iex.Data);
                 Log(iex.StackTrace);
 
                 iex = iex.InnerException;
             }
 
             Log();
+        }
+
+        private static void LogExceptionData(IDictionary data)
+        {
+            var dataEntries = data
+                .Cast<DictionaryEntry>()
+                .Select(x => new { Key = x.Key.ToString(), Value = x.Value?.ToString() ?? "" })
+                .OrderBy(x => x.Key)
+                .ToList();
+
+            if (!dataEntries.Any())
+                return;
+
+            Log("   EXCEPTION DATA:");
+
+            dataEntries.ForEach(x =>
+            {
+                Log($"      {x.Key}: {x.Value ?? ""}");
+            });
         }
 
         /// <summary>

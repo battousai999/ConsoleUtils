@@ -83,5 +83,83 @@ namespace ConsoleUtils.Tests
             Assert.Contains("ApplicationException", log);
             Assert.Contains(exceptionMessage, log);
         }
+
+        [Fact]
+        public void WhenCalledWithExceptionData_ThenDataIsLogged()
+        {
+            var log = "";
+            var dataKey = "exception-data-key";
+            var dataValue = "exception-data-value";
+
+            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+
+            try
+            {
+                var exception = new ApplicationException("This is a test exception message.");
+
+                exception.Data[dataKey] = dataValue;
+
+                throw exception;
+            }
+            catch (Exception ex)
+            {
+                utils.ConsoleUtils.LogException(ex);
+            }
+
+            Assert.Contains(dataKey, log);
+            Assert.Contains(dataValue, log);
+        }
+
+        [Fact]
+        public void WhenCalledWithoutExceptionData_ThenDoesNotLogExceptionDataHeader()
+        {
+            var log = "";
+
+            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+
+            try
+            {
+                throw new ApplicationException("This is a test exception message.");
+            }
+            catch (Exception ex)
+            {
+                utils.ConsoleUtils.LogException(ex);
+            }
+
+            Assert.DoesNotContain("EXCEPTION DATA:", log);
+        }
+
+        [Fact]
+        public void WhenInnerExceptionHavingDataIsIncluded_ThenDataIsLogged()
+        {
+            var log = "";
+            var dataKey = "exception-data-key";
+            var dataValue = "exception-data-value";
+
+            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+
+            try
+            {
+                try
+                {
+                    var exception = new ApplicationException("This is a test exception message.");
+
+                    exception.Data[dataKey] = dataValue;
+
+                    throw exception;
+                }
+                catch (Exception innerEx)
+                {
+                    throw new InvalidOperationException("Some outer exception message.", innerEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                utils.ConsoleUtils.LogException(ex);
+            }
+
+            Assert.Contains(dataKey, log);
+            Assert.Contains(dataValue, log);
+        }
     }
 }
