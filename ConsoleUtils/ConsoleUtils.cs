@@ -14,6 +14,7 @@ namespace Battousai.Utils
         private static Action<string> consoleWriter = null;
         private static Func<string> consoleReader = null;
         private static bool injectNewlineForWriter = false;
+        private static readonly object logLock = new object();
 
         /// <summary>
         /// This method executes the action, optionally pausing afterwards (with a message to press
@@ -97,12 +98,15 @@ namespace Battousai.Utils
 
         private static void WriteToConsoleWriter(string message)
         {
-            if (consoleWriter == null)
-                Console.WriteLine(message);
-            else if (injectNewlineForWriter)
-                consoleWriter(message + Environment.NewLine);
-            else
-                consoleWriter(message);
+            lock (logLock)
+            {
+                if (consoleWriter == null)
+                    Console.WriteLine(message);
+                else if (injectNewlineForWriter)
+                    consoleWriter(message + Environment.NewLine);
+                else
+                    consoleWriter(message);
+            }
         }
 
         /// <summary>
@@ -140,34 +144,37 @@ namespace Battousai.Utils
         /// <param name="ex">The exception to log.</param>
         public static void LogException(string message, Exception ex)
         {
-            Log();
-
-            if (String.IsNullOrWhiteSpace(message))
-                Log($"Caught exception: <{ex.GetType().Name}> {ex.Message}");
-            else
-            {
-                if (!logExceptionMessageEndingRegex.IsMatch(message))
-                    message += ": ";
-
-                Log($"{message}<{ex.GetType().Name}> {ex.Message}");
-            }
-
-            LogExceptionData(ex.Data);
-            Log(ex.StackTrace);
-
-            var iex = ex.InnerException;
-
-            while (iex != null)
+            lock (logLock)
             {
                 Log();
-                Log($"[Inner Exception] <{iex.GetType().Name}> {iex.Message}");
-                LogExceptionData(iex.Data);
-                Log(iex.StackTrace);
 
-                iex = iex.InnerException;
+                if (String.IsNullOrWhiteSpace(message))
+                    Log($"Caught exception: <{ex.GetType().Name}> {ex.Message}");
+                else
+                {
+                    if (!logExceptionMessageEndingRegex.IsMatch(message))
+                        message += ": ";
+
+                    Log($"{message}<{ex.GetType().Name}> {ex.Message}");
+                }
+
+                LogExceptionData(ex.Data);
+                Log(ex.StackTrace);
+
+                var iex = ex.InnerException;
+
+                while (iex != null)
+                {
+                    Log();
+                    Log($"[Inner Exception] <{iex.GetType().Name}> {iex.Message}");
+                    LogExceptionData(iex.Data);
+                    Log(iex.StackTrace);
+
+                    iex = iex.InnerException;
+                }
+
+                Log();
             }
-
-            Log();
         }
 
         private static void LogExceptionData(IDictionary data)
@@ -254,8 +261,11 @@ namespace Battousai.Utils
         /// </param>
         public static void RegisterConsoleWriter(Action<string> writer, bool injectNewline = false)
         {
-            consoleWriter = writer;
-            injectNewlineForWriter = injectNewline;
+            lock (logLock)
+            {
+                consoleWriter = writer;
+                injectNewlineForWriter = injectNewline;
+            }
         }
 
         /// <summary>
