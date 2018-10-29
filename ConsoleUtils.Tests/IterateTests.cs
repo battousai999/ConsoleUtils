@@ -85,7 +85,7 @@ namespace ConsoleUtils.Tests
         [Fact]
         public void WhenCalledReturningAverageDuration_ThenReturnsNonZeroDuration()
         {
-            var duration = utils.ConsoleUtils.Iterate(10, () => Thread.Sleep(TimeSpan.FromMilliseconds(100)), false);
+            var duration = utils.ConsoleUtils.Iterate(10, () => Thread.Sleep(TimeSpan.FromMilliseconds(100)), true);
 
             Assert.True(duration > TimeSpan.Zero);
         }
