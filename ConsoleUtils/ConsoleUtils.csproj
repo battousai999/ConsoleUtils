@@ -1,8 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <RootNamespace>ConsoleUtils</RootNamespace>
+    <PackageId>Battousai.ConsoleUtils</PackageId>
+    <Product>Battousai.ConsoleUtils</Product>
+    <Company>Kurtis Jones</Company>
+    <Authors>Kurtis Jones</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/battousai999/ConsoleUtils</PackageProjectUrl>
+    <Description>Some utility functions useful when writing prototype console applications.</Description>
+    <PackageTags>C#</PackageTags>
   </PropertyGroup>
 
 </Project>
