@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <RootNamespace>ConsoleUtils</RootNamespace>
+    <RootNamespace>Battousai.Utils</RootNamespace>
     <PackageId>Battousai.ConsoleUtils</PackageId>
     <Product>Battousai.ConsoleUtils</Product>
     <Company>Kurtis Jones</Company>
