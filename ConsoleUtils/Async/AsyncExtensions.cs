@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Battousai.Utils.Extensions
+namespace Battousai.Utils.Async
 {
     public static class AsyncExtensions
     {
