@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
@@ -205,11 +206,13 @@ namespace Battousai.Utils
         /// <returns>A timespan representing the amount of time to execute the action.</returns>
         public static TimeSpan MeasureDuration(Action action)
         {
-            var startTime = DateTime.Now;
+            var stopwatch = new Stopwatch();
 
+            stopwatch.Start();
             action();
+            stopwatch.Stop();
 
-            return DateTime.Now.Subtract(startTime);
+            return stopwatch.Elapsed;
         }
 
         /// <summary>
@@ -240,13 +243,17 @@ namespace Battousai.Utils
         /// </param>
         public static TimeSpan Iterate(int iterations, Action<int> action, int startingInterval = 0, bool returnsAverageDuration = false)
         {
-            var startTime = DateTime.Now;
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
 
             Enumerable.Range(startingInterval, iterations)
                 .ToList()
                 .ForEach(action);
 
-            var duration = DateTime.Now.Subtract(startTime);
+            stopwatch.Stop();
+
+            var duration = stopwatch.Elapsed;
 
             return (returnsAverageDuration ? TimeSpan.FromTicks(duration.Ticks / iterations) : duration);
         }
