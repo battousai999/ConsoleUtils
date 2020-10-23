@@ -89,6 +89,12 @@ namespace Battousai.Utils.StringUtils
         /// <returns>The string 'text' with the string 'ending' appended if not already ending with 'ending'.</returns>
         public static string EnsureEndsWith(this string text, string ending, StringComparison comparison)
         {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+
+            if (ending == null)
+                throw new ArgumentNullException(nameof(ending));
+
             if (text.EndsWith(ending, comparison))
                 return text;
             else
@@ -112,6 +118,12 @@ namespace Battousai.Utils.StringUtils
         /// <returns>The string 'text' with the string 'starting' prepended if not already starting with 'starting'.</returns>
         public static string EnsureStartsWith(this string text, string starting, StringComparison comparison)
         {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+
+            if (starting == null)
+                throw new ArgumentNullException(nameof(starting));
+
             if (text.StartsWith(starting, comparison))
                 return text;
             else
@@ -222,7 +234,7 @@ namespace Battousai.Utils.StringUtils
         /// from its end.</returns>
         public static string RemoveSurrounding(this string text, string starting, string ending, StringComparison comparison)
         {
-            if (String.IsNullOrEmpty(text) || (text?.Length ?? 0) < (starting?.Length ?? 0) + (ending?.Length ?? 0))
+            if (String.IsNullOrEmpty(text))
                 return text;
 
             return text
@@ -231,7 +243,8 @@ namespace Battousai.Utils.StringUtils
         }
 
         /// <summary>
-        /// Returns a stream containing the contents of 'str' encoded with the given 'encoding' (if specified).
+        /// Returns a stream containing the contents of 'str' encoded with the given 'encoding' (if specified).  Note: the
+        /// returned stream should be disposed by the caller.
         /// </summary>
         /// <param name="str">The string that will make up the contents of the returned stream</param>
         /// <param name="encoding">The encoding to use to encode the contents in the stream</param>
@@ -240,17 +253,9 @@ namespace Battousai.Utils.StringUtils
         {
             var stream = new MemoryStream();
 
-            Func<StreamWriter> createWriter = () =>
+            using (var writer = new StreamWriter(stream, encoding ?? new UTF8Encoding(false, true), 1024, true))
             {
-                if (encoding == null)
-                    return new StreamWriter(stream);
-                else
-                    return new StreamWriter(stream, encoding);
-            };
-
-            using (var writer = createWriter())
-            {
-                writer.Write(str);
+                writer.Write(str ?? "");
                 writer.Flush();
 
                 stream.Position = 0;
