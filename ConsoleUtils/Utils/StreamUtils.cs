@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Battousai.Utils.Utils
 {
     public static class StreamUtils
     {
         /// <summary>
-        /// 
+        /// Copies content from the 'source' stream to the 'destination' stream.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="destination"></param>
-        /// <param name="bufferSize"></param>
+        /// <param name="source">The stream from which to copy</param>
+        /// <param name="destination">The stream to which to copy</param>
+        /// <param name="bufferSize">The size of the buffer to use when copying</param>
         public static void CopyStream(Stream source, Stream destination, int bufferSize = 4096)
         {
             if (source == null)
