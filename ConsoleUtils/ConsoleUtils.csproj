@@ -11,6 +11,7 @@
     <PackageProjectUrl>https://github.com/battousai999/ConsoleUtils</PackageProjectUrl>
     <Description>Some utility functions useful when writing prototype console applications.</Description>
     <PackageTags>C#</PackageTags>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
 </Project>
