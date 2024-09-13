@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using utils = Battousai.Utils;
+using Utils = Battousai.Utils;
 
 namespace ConsoleUtils.Tests
 {
@@ -12,14 +12,14 @@ namespace ConsoleUtils.Tests
     {
         public RunLoggingExceptionsAsyncTests()
         {
-            utils.ConsoleUtils.RegisterConsoleWriter(null);
-            utils.ConsoleUtils.RegisterConsoleReader(null);
+            Utils.ConsoleUtils.RegisterConsoleWriter(null);
+            Utils.ConsoleUtils.RegisterConsoleReader(null);
         }
 
         [Fact]
         public void WhenCalled_ThenConsumesExceptions()
         {
-            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
+            Utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
             {
                 await Task.Delay(100);
                 throw new InvalidOperationException("Test exception");
@@ -31,7 +31,7 @@ namespace ConsoleUtils.Tests
         {
             var value = 0;
 
-            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
+            Utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
             {
                 await Task.Delay(100);
                 value = 99;
@@ -46,9 +46,9 @@ namespace ConsoleUtils.Tests
             var log = "";
             var exceptionMessage = "Test exception";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
-            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
+            Utils.ConsoleUtils.RunLoggingExceptionsAsync(async () =>
             {
                 await Task.Delay(100);
                 throw new InvalidOperationException(exceptionMessage);
@@ -64,13 +64,13 @@ namespace ConsoleUtils.Tests
         {
             var hasCalledReadline = false;
 
-            utils.ConsoleUtils.RegisterConsoleReader(() =>
+            Utils.ConsoleUtils.RegisterConsoleReader(() =>
             {
                 hasCalledReadline = true;
                 return "";
             });
 
-            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, true);
+            Utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, true);
 
             Assert.True(hasCalledReadline);
         }
@@ -80,13 +80,13 @@ namespace ConsoleUtils.Tests
         {
             var hasCalledReadline = false;
 
-            utils.ConsoleUtils.RegisterConsoleReader(() =>
+            Utils.ConsoleUtils.RegisterConsoleReader(() =>
             {
                 hasCalledReadline = true;
                 return "";
             });
 
-            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false);
+            Utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false);
 
             Assert.False(hasCalledReadline);
         }
@@ -96,9 +96,9 @@ namespace ConsoleUtils.Tests
         {
             string log = "";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
 
-            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false, true);
+            Utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false, true);
 
             Assert.Contains("Finished in", log);
         }
@@ -108,9 +108,9 @@ namespace ConsoleUtils.Tests
         {
             string log = "";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
 
-            utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false, false);
+            Utils.ConsoleUtils.RunLoggingExceptionsAsync(async () => { await Task.Delay(100); }, false, false);
 
             Assert.DoesNotContain("Finished in", log);
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using utils = Battousai.Utils;
+using Utils = Battousai.Utils;
 
 namespace ConsoleUtils.Tests
 {
@@ -12,7 +12,7 @@ namespace ConsoleUtils.Tests
     {
         public LogExceptionTests()
         {
-            utils.ConsoleUtils.RegisterConsoleWriter(null);
+            Utils.ConsoleUtils.RegisterConsoleWriter(null);
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace ConsoleUtils.Tests
             var log = "";
             var exceptionMessage = "This is a test exception message.";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
             try
             {
@@ -29,7 +29,7 @@ namespace ConsoleUtils.Tests
             }
             catch (Exception ex)
             {
-                utils.ConsoleUtils.LogException(ex);
+                Utils.ConsoleUtils.LogException(ex);
             }
 
             Assert.Contains("InvalidOperationException", log);
@@ -42,7 +42,7 @@ namespace ConsoleUtils.Tests
             var log = "";
             var errorMessage = "This is a test error message.";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
             try
             {
@@ -50,7 +50,7 @@ namespace ConsoleUtils.Tests
             }
             catch (Exception ex)
             {
-                utils.ConsoleUtils.LogException(errorMessage, ex);
+                Utils.ConsoleUtils.LogException(errorMessage, ex);
             }
 
             Assert.Contains(errorMessage, log);
@@ -62,7 +62,7 @@ namespace ConsoleUtils.Tests
             var log = "";
             var exceptionMessage = "This is a test exception message.";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
             try
             {
@@ -77,7 +77,7 @@ namespace ConsoleUtils.Tests
             }
             catch (Exception ex)
             {
-                utils.ConsoleUtils.LogException(ex);
+                Utils.ConsoleUtils.LogException(ex);
             }
 
             Assert.Contains("ApplicationException", log);
@@ -91,7 +91,7 @@ namespace ConsoleUtils.Tests
             var dataKey = "exception-data-key";
             var dataValue = "exception-data-value";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
             try
             {
@@ -103,7 +103,7 @@ namespace ConsoleUtils.Tests
             }
             catch (Exception ex)
             {
-                utils.ConsoleUtils.LogException(ex);
+                Utils.ConsoleUtils.LogException(ex);
             }
 
             Assert.Contains(dataKey, log);
@@ -115,7 +115,7 @@ namespace ConsoleUtils.Tests
         {
             var log = "";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
             try
             {
@@ -123,7 +123,7 @@ namespace ConsoleUtils.Tests
             }
             catch (Exception ex)
             {
-                utils.ConsoleUtils.LogException(ex);
+                Utils.ConsoleUtils.LogException(ex);
             }
 
             Assert.DoesNotContain("EXCEPTION DATA:", log);
@@ -136,7 +136,7 @@ namespace ConsoleUtils.Tests
             var dataKey = "exception-data-key";
             var dataValue = "exception-data-value";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
             try
             {
@@ -155,7 +155,7 @@ namespace ConsoleUtils.Tests
             }
             catch (Exception ex)
             {
-                utils.ConsoleUtils.LogException(ex);
+                Utils.ConsoleUtils.LogException(ex);
             }
 
             Assert.Contains(dataKey, log);

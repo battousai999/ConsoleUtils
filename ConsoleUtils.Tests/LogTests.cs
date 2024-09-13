@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using utils = Battousai.Utils;
+using Utils = Battousai.Utils;
 
 namespace ConsoleUtils.Tests
 {
@@ -12,7 +12,7 @@ namespace ConsoleUtils.Tests
     {
         public LogTests()
         {
-            utils.ConsoleUtils.RegisterConsoleWriter(null);
+            Utils.ConsoleUtils.RegisterConsoleWriter(null);
         }
 
         [Fact]
@@ -21,9 +21,9 @@ namespace ConsoleUtils.Tests
             var log = "";
             var testString = "This is a test string.";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, false);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, false);
 
-            utils.ConsoleUtils.Log(testString);
+            Utils.ConsoleUtils.Log(testString);
 
             Assert.Equal(testString, log);
         }
@@ -33,9 +33,9 @@ namespace ConsoleUtils.Tests
         {
             var log = "";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
-            utils.ConsoleUtils.Log();
+            Utils.ConsoleUtils.Log();
 
             Assert.Equal(Environment.NewLine, log);
         }
@@ -47,9 +47,9 @@ namespace ConsoleUtils.Tests
             var testString = "This is a test string with {0} {1}.";
             var parameters = new List<string> { "some", "parameters" };
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, false);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, false);
 
-            utils.ConsoleUtils.Log(testString, parameters[0], parameters[1]);
+            Utils.ConsoleUtils.Log(testString, parameters[0], parameters[1]);
 
             Assert.Equal(String.Format(testString, parameters[0], parameters[1]), log);
         }

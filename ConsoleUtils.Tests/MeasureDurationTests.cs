@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using utils = Battousai.Utils;
+using Utils = Battousai.Utils;
 
 namespace ConsoleUtils.Tests
 {
@@ -15,7 +15,7 @@ namespace ConsoleUtils.Tests
         {
             var waitSpan = TimeSpan.FromMilliseconds(100);
 
-            var duration = utils.ConsoleUtils.MeasureDuration(() =>
+            var duration = Utils.ConsoleUtils.MeasureDuration(() =>
             {
                 System.Threading.Thread.Sleep(waitSpan);
             });
@@ -28,7 +28,7 @@ namespace ConsoleUtils.Tests
         {
             var waitSpan = TimeSpan.FromSeconds(1);
 
-            var duration = utils.ConsoleUtils.MeasureDuration(() =>
+            var duration = Utils.ConsoleUtils.MeasureDuration(() =>
             {
                 System.Threading.Thread.Sleep(waitSpan);
             });
