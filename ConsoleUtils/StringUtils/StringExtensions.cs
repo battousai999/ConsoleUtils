@@ -35,15 +35,24 @@ namespace Battousai.Utils.StringUtils
         /// the 'ellipsis' string.</returns>
         public static string PadRightWithEllipsis(this string text, int size, string ellipsis = "...")
         {
+            if (size < 0)
+                throw new ArgumentException("Size cannot be less than zero.", nameof(size));
+
             if (String.IsNullOrWhiteSpace(text))
                 return String.Empty.PadRight(size);
 
+            if (text.Length == size)
+                return text;
+
             var ellipsisLength = ellipsis?.Length ?? 0;
 
-            if (size < (ellipsisLength + 1))
-                return text.Substring(0, size);
-            else if (text.Length > size)
-                return $"{text.Substring(0, size - ellipsisLength)}{ellipsis ?? ""}";
+            if (text.Length > size)
+            {
+                if (size < (ellipsisLength + 1))
+                    return text.Substring(0, size);
+                else
+                    return $"{text.Substring(0, size - ellipsisLength)}{ellipsis ?? ""}";
+            }
             else
                 return text.PadRight(size);
         }
@@ -59,15 +68,24 @@ namespace Battousai.Utils.StringUtils
         /// the 'ellipsis' string.</returns>
         public static string PadLeftWithEllipsis(this string text, int size, string ellipsis = "...")
         {
+            if (size < 0)
+                throw new ArgumentException("Size cannot be less than zero.", nameof(size));
+
             if (String.IsNullOrWhiteSpace(text))
                 return String.Empty.PadRight(size);
 
+            if (text.Length == size)
+                return text;
+
             var ellipsisLength = ellipsis?.Length ?? 0;
 
-            if (size < (ellipsisLength + 1))
-                return text.Substring(0, size);
-            else if (text.Length > size)
-                return $"{text.Substring(0, size - ellipsisLength)}{ellipsis ?? ""}";
+            if (text.Length > size)
+            {
+                if (size < (ellipsisLength + 1))
+                    return text.Substring(0, size);
+                else
+                    return $"{text.Substring(0, size - ellipsisLength)}{ellipsis ?? ""}";
+            }
             else
                 return text.PadLeft(size);
         }

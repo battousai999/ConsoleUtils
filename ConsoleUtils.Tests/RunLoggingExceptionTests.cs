@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using utils = Battousai.Utils;
+using Utils = Battousai.Utils;
 
 namespace ConsoleUtils.Tests
 {
@@ -13,14 +13,14 @@ namespace ConsoleUtils.Tests
     {
         public RunLoggingExceptionTests()
         {
-            utils.ConsoleUtils.RegisterConsoleWriter(null);
-            utils.ConsoleUtils.RegisterConsoleReader(null);
+            Utils.ConsoleUtils.RegisterConsoleWriter(null);
+            Utils.ConsoleUtils.RegisterConsoleReader(null);
         }
 
         [Fact]
         public void WhenCalled_ThenConsumesExceptions()
         {
-            utils.ConsoleUtils.RunLoggingExceptions(() =>
+            Utils.ConsoleUtils.RunLoggingExceptions(() =>
             {
                 throw new InvalidOperationException("Test exception");
             });
@@ -31,7 +31,7 @@ namespace ConsoleUtils.Tests
         {
             var value = 0;
 
-            utils.ConsoleUtils.RunLoggingExceptions(() =>
+            Utils.ConsoleUtils.RunLoggingExceptions(() =>
             {
                 value = 99;
             });
@@ -45,9 +45,9 @@ namespace ConsoleUtils.Tests
             var log = "";
             var exceptionMessage = "Test exception";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
-            utils.ConsoleUtils.RunLoggingExceptions(() =>
+            Utils.ConsoleUtils.RunLoggingExceptions(() =>
             {
                 throw new InvalidOperationException(exceptionMessage);
             });
@@ -61,13 +61,13 @@ namespace ConsoleUtils.Tests
         {
             var hasCalledReadline = false;
 
-            utils.ConsoleUtils.RegisterConsoleReader(() =>
+            Utils.ConsoleUtils.RegisterConsoleReader(() =>
             {
                 hasCalledReadline = true;
                 return "";
             });
 
-            utils.ConsoleUtils.RunLoggingExceptions(() => { }, true);
+            Utils.ConsoleUtils.RunLoggingExceptions(() => { }, true);
 
             Assert.True(hasCalledReadline);
         }
@@ -77,13 +77,13 @@ namespace ConsoleUtils.Tests
         {
             var hasCalledReadline = false;
 
-            utils.ConsoleUtils.RegisterConsoleReader(() =>
+            Utils.ConsoleUtils.RegisterConsoleReader(() =>
             {
                 hasCalledReadline = true;
                 return "";
             });
 
-            utils.ConsoleUtils.RunLoggingExceptions(() => { }, false);
+            Utils.ConsoleUtils.RunLoggingExceptions(() => { }, false);
 
             Assert.False(hasCalledReadline);
         }
@@ -93,9 +93,9 @@ namespace ConsoleUtils.Tests
         {
             string log = "";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
 
-            utils.ConsoleUtils.RunLoggingExceptions(() => { Thread.Sleep(100); }, false, true);
+            Utils.ConsoleUtils.RunLoggingExceptions(() => { Thread.Sleep(100); }, false, true);
 
             Assert.Contains("Finished in", log);
         }
@@ -105,9 +105,9 @@ namespace ConsoleUtils.Tests
         {
             string log = "";
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => log += x, true);
 
-            utils.ConsoleUtils.RunLoggingExceptions(() => { Thread.Sleep(100); }, false, false);
+            Utils.ConsoleUtils.RunLoggingExceptions(() => { Thread.Sleep(100); }, false, false);
 
             Assert.DoesNotContain("Finished in", log);
         }

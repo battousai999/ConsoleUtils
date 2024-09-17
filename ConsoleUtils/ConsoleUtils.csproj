@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0;net8.0</TargetFrameworks>
     <RootNamespace>Battousai.Utils</RootNamespace>
     <PackageId>Battousai.ConsoleUtils</PackageId>
     <Product>Battousai.ConsoleUtils</Product>
@@ -11,7 +11,10 @@
     <PackageProjectUrl>https://github.com/battousai999/ConsoleUtils</PackageProjectUrl>
     <Description>Some utility functions useful when writing prototype console applications.</Description>
     <PackageTags>C#</PackageTags>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
+
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using utils = Battousai.Utils;
+using Utils = Battousai.Utils;
 
 namespace ConsoleUtils.Tests
 {
@@ -12,7 +12,7 @@ namespace ConsoleUtils.Tests
     {
         public RegisterConsoleReaderTests()
         {
-            utils.ConsoleUtils.RegisterConsoleReader(null);
+            Utils.ConsoleUtils.RegisterConsoleReader(null);
         }
 
         [Fact]
@@ -20,13 +20,13 @@ namespace ConsoleUtils.Tests
         {
             var hasCalledConsoleReader = false;
 
-            utils.ConsoleUtils.RegisterConsoleReader(() =>
+            Utils.ConsoleUtils.RegisterConsoleReader(() =>
             {
                 hasCalledConsoleReader = true;
                 return "";
             });
 
-            utils.ConsoleUtils.RunLoggingExceptions(() => { }, true);
+            Utils.ConsoleUtils.RunLoggingExceptions(() => { }, true);
 
             Assert.True(hasCalledConsoleReader);
         }

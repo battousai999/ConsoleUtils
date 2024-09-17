@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using utils = Battousai.Utils;
+using Utils = Battousai.Utils;
 
 namespace ConsoleUtils.Tests
 {
@@ -12,7 +12,7 @@ namespace ConsoleUtils.Tests
     {
         public RegisterConsoleWriterTests()
         {
-            utils.ConsoleUtils.RegisterConsoleWriter(null);
+            Utils.ConsoleUtils.RegisterConsoleWriter(null);
         }
 
         [Fact]
@@ -20,12 +20,12 @@ namespace ConsoleUtils.Tests
         {
             var hasCalledConsoleWriter = false;
 
-            utils.ConsoleUtils.RegisterConsoleWriter(_ =>
+            Utils.ConsoleUtils.RegisterConsoleWriter(_ =>
             {
                 hasCalledConsoleWriter = true;
             });
 
-            utils.ConsoleUtils.Log("testing...");
+            Utils.ConsoleUtils.Log("testing...");
 
             Assert.True(hasCalledConsoleWriter);
         }
@@ -38,10 +38,10 @@ namespace ConsoleUtils.Tests
             var str2 = "string";
             var expectedValue = str1 + Environment.NewLine + str2 + Environment.NewLine;
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, true);
 
-            utils.ConsoleUtils.Log(str1);
-            utils.ConsoleUtils.Log(str2);
+            Utils.ConsoleUtils.Log(str1);
+            Utils.ConsoleUtils.Log(str2);
 
             Assert.Equal(expectedValue, log);
         }
@@ -54,10 +54,10 @@ namespace ConsoleUtils.Tests
             var str2 = "string";
             var expectedValue = str1 + str2;
 
-            utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, false);
+            Utils.ConsoleUtils.RegisterConsoleWriter(x => { log += x; }, false);
 
-            utils.ConsoleUtils.Log(str1);
-            utils.ConsoleUtils.Log(str2);
+            Utils.ConsoleUtils.Log(str1);
+            Utils.ConsoleUtils.Log(str2);
 
             Assert.Equal(expectedValue, log);
         }

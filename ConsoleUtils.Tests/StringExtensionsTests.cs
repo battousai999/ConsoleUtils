@@ -134,6 +134,22 @@ namespace ConsoleUtils.Tests
 
                 results.ShouldBe($"{TestString.Substring(0, Padding - ellipsis.Length)}{ellipsis}");
             }
+
+            [Fact]
+            public void ReturnsPaddedText_IfCalledWithTextOfSizeLessThanPassedSizeAndLessThanLengthOfEllipsis()
+            {
+                var ellipsis = "****";
+                var testString = TestString.Substring(0, 2);
+                var results = testString.PadRightWithEllipsis(3, ellipsis);
+
+                results.ShouldBe($"{testString} ");
+            }
+
+            [Fact]
+            public void ThrowsException_IfCalledWithNegativeSize()
+            {
+                Should.Throw<ArgumentException>(() => { TestString.PadRightWithEllipsis(-1); });
+            }
         }
 
         public class PadLeftWithEllipsisTests
@@ -205,6 +221,22 @@ namespace ConsoleUtils.Tests
                 var results = TestString.PadLeftWithEllipsis(Padding, ellipsis);
 
                 results.ShouldBe($"{TestString.Substring(0, Padding - ellipsis.Length)}{ellipsis}");
+            }
+
+            [Fact]
+            public void ReturnsPaddedText_IfCalledWithTextOfSizeLessThanPassedSizeAndLessThanLengthOfEllipsis()
+            {
+                var ellipsis = "****";
+                var testString = TestString.Substring(0, 2);
+                var results = testString.PadLeftWithEllipsis(3, ellipsis);
+
+                results.ShouldBe($" {testString}");
+            }
+
+            [Fact]
+            public void ThrowsException_IfCalledWithNegativeSize()
+            {
+                Should.Throw<ArgumentException>(() => { TestString.PadRightWithEllipsis(-1); });
             }
         }
 

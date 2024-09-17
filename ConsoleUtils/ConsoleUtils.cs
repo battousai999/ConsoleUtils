@@ -123,6 +123,7 @@ namespace Battousai.Utils
         /// passed to this method follow the same pattern as the String.Format function.
         /// </summary>
         /// <param name="message">The message to log.</param>
+        /// <param name="parameters">The set of objects referenced within the message</param>
         public static void Log(string message, params object[] parameters)
         {
             WriteToConsoleWriter(String.Format(message ?? "", parameters));
