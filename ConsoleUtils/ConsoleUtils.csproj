@@ -11,8 +11,8 @@
     <PackageProjectUrl>https://github.com/battousai999/ConsoleUtils</PackageProjectUrl>
     <Description>Some utility functions useful when writing prototype console applications.</Description>
     <PackageTags>C#</PackageTags>
-    <Version>1.1.1</Version>
-    
+    <Version>1.2.0</Version>
+
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
